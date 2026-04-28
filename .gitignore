@@ -16,9 +16,10 @@ database.sqlite
 .env
 .env.*
 
-
-
-
+.idea
+.zed
+.vscode
+screenshots
 
 /extensions/*/dist
 
