@@ -15,10 +15,12 @@ database.sqlite
 
 .env
 .env.*
+!.env.sample
 
-
-
-
+.idea
+.zed
+.vscode
+screenshots
 
 /extensions/*/dist
 
