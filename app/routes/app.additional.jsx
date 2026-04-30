@@ -210,10 +210,18 @@ export default function AdditionalPage() {
                         <s-stack direction="block" gap="none">
                           <s-text tone="neutral">Type:</s-text>
                           <s-text>{ret.returnTypeCaption}</s-text>
-                          <s-text tone="neutral">Size:</s-text>
-                          <s-text>{ret.size}</s-text>
-                          <s-text tone="neutral">Color:</s-text>
-                          <s-chip>{ret.color}</s-chip>
+                          {ret.size && (
+                            <>
+                              <s-text tone="neutral">Size:</s-text>
+                              <s-text>{ret.size}</s-text>
+                            </>
+                          )}
+                          {ret.color && (
+                            <>
+                              <s-text tone="neutral">Color:</s-text>
+                              <s-chip>{ret.color}</s-chip>
+                            </>
+                          )}
                         </s-stack>
                       </s-table-cell>
                       <s-table-cell>
