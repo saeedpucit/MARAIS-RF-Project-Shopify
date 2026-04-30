@@ -25,10 +25,12 @@ const TableRow = props => {
     <s-table-row>
       <s-table-cell>{props.ret.id}</s-table-cell>
       <s-table-cell>
-        <s-link href={props.storeUrl + '/customers/' + props.ret.customerId.replace(/[^\d]+/g, '')}>{props.ret.customerName}</s-link>
+        <s-link
+          href={props.storeUrl + '/customers/' + props.ret.customerId.replace(/[^\d]+/g, '')}>{props.ret.customerName}</s-link>
       </s-table-cell>
       <s-table-cell>
-        <s-link href={props.storeUrl + '/products/' + props.ret.productId.replace(/[^\d]+/g, '')}>{props.ret.productTitle}</s-link>
+        <s-link
+          href={props.storeUrl + '/products/' + props.ret.productId.replace(/[^\d]+/g, '')}>{props.ret.productTitle}</s-link>
       </s-table-cell>
       <s-table-cell>
         <s-stack direction="block" gap="none">
@@ -40,31 +42,14 @@ const TableRow = props => {
           <s-text>{creditTypes[props.ret.creditType]}</s-text>
         </s-stack>
       </s-table-cell>
-      {/*<s-table-cell>
-        <s-stack direction="block" gap="none">
-          {props.ret.size && (
-            <>
-              <s-text tone="neutral">Size:</s-text>
-              <s-text>{props.ret.size}</s-text>
-            </>
-          )}
-          {props.ret.color && (
-            <>
-              <s-text tone="neutral">Color:</s-text>
-              <s-chip>{props.ret.color}</s-chip>
-            </>
-          )}
-        </s-stack>
-      </s-table-cell>*/}
       <s-table-cell>
-        <s-stack direction="block" gap="none">
-          <s-text tone="neutral">Original:</s-text>
-          <s-text>${props.ret.amount?.toFixed(2)}</s-text>
-          <s-text tone="neutral">Fee:</s-text>
-          <s-text>${props.ret.fee?.toFixed(2)}</s-text>
-          <s-text tone="neutral">Return:</s-text>
-          <s-text tone="success" type="strong">${props.ret.returnAmount?.toFixed(2)}</s-text>
-        </s-stack>
+        <s-text tone="neutral">${props.ret.amount?.toFixed(2)}</s-text>
+      </s-table-cell>
+      <s-table-cell>
+        <s-text tone="neutral">${props.ret.fee?.toFixed(2)}</s-text>
+      </s-table-cell>
+      <s-table-cell>
+        <s-text tone="neutral">${props.ret.returnAmount?.toFixed(2)}</s-text>
       </s-table-cell>
       <s-table-cell>
         {props.renderImageThumbnails}
@@ -188,122 +173,126 @@ export default function Index () {
 
   return (
     <s-page heading="Product Return Management">
-      <s-section>
-        <s-stack direction="block" gap="base">
-          <s-stack direction="inline" gap="loose" align-items="center" justify-content="space-between">
-            <s-stack direction="block" gap="none">
-              <s-heading>Product Returns</s-heading>
+      <div style={{ width: 1200, marginLeft: '-120px' }}>
+        <s-section>
+          <s-stack direction="block" gap="base">
+            <s-stack direction="inline" gap="loose" align-items="center" justify-content="space-between">
+              <s-stack direction="block" gap="none">
+                <s-heading>Product Returns</s-heading>
+              </s-stack>
             </s-stack>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+              <div>
+                <s-text tone="subdued">Manage and process product return requests</s-text>
+              </div>
+              <div>
+                <s-button onClick={() => fetchPendingReturns(pageInfo.currentPage)} size="slim" loading={loading}
+                          variant="primary">
+                  Refresh
+                </s-button>
+              </div>
+            </div>
+
+            {error && (
+              <s-banner heading="Error" tone="critical" dismissible onDismiss={() => setError(null)}>
+                {error}
+              </s-banner>
+            )}
+
+            {loading && pendingReturns.length === 0 ? (
+              <s-box padding="base" text-align="center">
+                <s-spinner accessibilityLabel="Loading returns"/>
+              </s-box>
+            ) : pendingReturns.length === 0 ? (
+              <s-box padding="base" text-align="center">
+                <s-icon type="inbox-icon" tone="neutral"/>
+                <s-heading>No pending returns</s-heading>
+                <s-text tone="neutral">All return requests have been processed.</s-text>
+              </s-box>
+            ) : (
+              <s-table variant="auto">
+                <s-table-header-row>
+                  <s-table-header list-slot="primary">#</s-table-header>
+                  <s-table-header>Customer</s-table-header>
+                  <s-table-header>Product</s-table-header>
+                  <s-table-header>Reason for Return</s-table-header>
+                  <s-table-header>Type of Return</s-table-header>
+                  <s-table-header>Original Amount</s-table-header>
+                  <s-table-header>Return Fee</s-table-header>
+                  <s-table-header>Refund Amount</s-table-header>
+                  <s-table-header>Media</s-table-header>
+                  <s-table-header>Status</s-table-header>
+                  <s-table-header>&nbsp;</s-table-header>
+                </s-table-header-row>
+                <s-table-body>
+                  {pendingReturns.map((ret) => (
+                    <TableRow
+                      handleDelete={() => handleDelete(ret.productId, ret.id)}
+                      key={ret.id}
+                      ret={ret} storeUrl={storeUrl}
+                      renderImageThumbnails={renderImageThumbnails(ret.images)}/>
+                  ))}
+                </s-table-body>
+              </s-table>
+            )}
+
+            {pendingReturns.length > 0 && (
+              <s-box padding="base" border="base" border-radius="base">
+                <s-stack direction="block" gap="base">
+                  <s-stack direction="inline" gap="base" align-items="center">
+                    <s-text tone="neutral">Total Returns:</s-text>
+                    <s-text type="strong">{pendingReturns.length}</s-text>
+                  </s-stack>
+                  <s-stack direction="inline" gap="base" align-items="center">
+                    <s-text tone="neutral">Awaiting Action:</s-text>
+                    <s-text tone="warning" type="strong">
+                      {pendingReturns.filter(r => r.isApproved === false).length}
+                    </s-text>
+                  </s-stack>
+                  <s-stack direction="inline" gap="base" align-items="center">
+                    <s-text tone="neutral">Total Refund:</s-text>
+                    <s-text type="strong">
+                      ${pendingReturns.reduce((sum, r) => sum + (r.returnAmount || 0), 0).toFixed(2)}
+                    </s-text>
+                  </s-stack>
+                </s-stack>
+              </s-box>
+            )}
+
+            {/* Pagination Component */}
+            {Number(pageInfo.totalPages) > 1 && (
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                <s-stack direction="inline" gap="base" align-items="center" justify-content="center">
+                  <s-button
+                    onClick={() => {
+                      if (pageInfo.hasPreviousPage) {
+                        fetchPendingReturns(pageInfo.currentPage - 1);
+                      }
+                    }}
+                    disabled={!pageInfo.hasPreviousPage}
+                  >
+                    Previous
+                  </s-button>
+                  <s-text tone="subdued">
+                    Page {pageInfo.currentPage} of {pageInfo.totalPages}
+                  </s-text>
+                  <s-button
+                    onClick={() => {
+                      if (pageInfo.hasNextPage) {
+                        fetchPendingReturns(pageInfo.currentPage + 1);
+                      }
+                    }}
+                    disabled={!pageInfo.hasNextPage}
+                  >
+                    Next
+                  </s-button>
+                </s-stack>
+              </div>
+            )}
           </s-stack>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-            <div>
-              <s-text tone="subdued">Manage and process product return requests</s-text>
-            </div>
-            <div>
-              <s-button onClick={() => fetchPendingReturns(pageInfo.currentPage)} size="slim" loading={loading}
-                        variant="primary">
-                Refresh
-              </s-button>
-            </div>
-          </div>
-
-          {error && (
-            <s-banner heading="Error" tone="critical" dismissible onDismiss={() => setError(null)}>
-              {error}
-            </s-banner>
-          )}
-
-          {loading && pendingReturns.length === 0 ? (
-            <s-box padding="base" text-align="center">
-              <s-spinner accessibilityLabel="Loading returns"/>
-            </s-box>
-          ) : pendingReturns.length === 0 ? (
-            <s-box padding="base" text-align="center">
-              <s-icon type="inbox-icon" tone="neutral"/>
-              <s-heading>No pending returns</s-heading>
-              <s-text tone="neutral">All return requests have been processed.</s-text>
-            </s-box>
-          ) : (
-            <s-table variant="auto">
-              <s-table-header-row>
-                <s-table-header list-slot="primary">#</s-table-header>
-                <s-table-header>Customer</s-table-header>
-                <s-table-header>Product</s-table-header>
-                <s-table-header>Reason for Return</s-table-header>
-                <s-table-header>Type of Return</s-table-header>
-                <s-table-header>Amount</s-table-header>
-                <s-table-header>Media</s-table-header>
-                <s-table-header>Status</s-table-header>
-                <s-table-header>&nbsp;</s-table-header>
-              </s-table-header-row>
-              <s-table-body>
-                {pendingReturns.map((ret) => (
-                  <TableRow
-                    handleDelete={() => handleDelete(ret.productId, ret.id)}
-                    key={ret.id}
-                    ret={ret} storeUrl={storeUrl}
-                    renderImageThumbnails={renderImageThumbnails(ret.images)}/>
-                ))}
-              </s-table-body>
-            </s-table>
-          )}
-
-          {pendingReturns.length > 0 && (
-            <s-box padding="base" border="base" border-radius="base">
-              <s-stack direction="block" gap="base">
-                <s-stack direction="inline" gap="base" align-items="center">
-                  <s-text tone="neutral">Total Returns:</s-text>
-                  <s-text type="strong">{pendingReturns.length}</s-text>
-                </s-stack>
-                <s-stack direction="inline" gap="base" align-items="center">
-                  <s-text tone="neutral">Awaiting Action:</s-text>
-                  <s-text tone="warning" type="strong">
-                    {pendingReturns.filter(r => r.isApproved === false).length}
-                  </s-text>
-                </s-stack>
-                <s-stack direction="inline" gap="base" align-items="center">
-                  <s-text tone="neutral">Total Refund:</s-text>
-                  <s-text type="strong">
-                    ${pendingReturns.reduce((sum, r) => sum + (r.returnAmount || 0), 0).toFixed(2)}
-                  </s-text>
-                </s-stack>
-              </s-stack>
-            </s-box>
-          )}
-
-          {/* Pagination Component */}
-          {Number(pageInfo.totalPages) > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-              <s-stack direction="inline" gap="base" align-items="center" justify-content="center">
-                <s-button
-                  onClick={() => {
-                    if (pageInfo.hasPreviousPage) {
-                      fetchPendingReturns(pageInfo.currentPage - 1);
-                    }
-                  }}
-                  disabled={!pageInfo.hasPreviousPage}
-                >
-                  Previous
-                </s-button>
-                <s-text tone="subdued">
-                  Page {pageInfo.currentPage} of {pageInfo.totalPages}
-                </s-text>
-                <s-button
-                  onClick={() => {
-                    if (pageInfo.hasNextPage) {
-                      fetchPendingReturns(pageInfo.currentPage + 1);
-                    }
-                  }}
-                  disabled={!pageInfo.hasNextPage}
-                >
-                  Next
-                </s-button>
-              </s-stack>
-            </div>
-          )}
-        </s-stack>
-      </s-section>
+        </s-section>
+      </div>
     </s-page>
   );
 }

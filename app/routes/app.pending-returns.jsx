@@ -2,7 +2,7 @@ import { useAppBridge } from '@shopify/app-bridge-react';
 import { useEffect, useState } from 'react';
 import httpClient from '../libs/api.js';
 
-export default function PendingReturns() {
+export default function PendingReturns () {
   const shopify = useAppBridge();
   const [pendingReturns, setPendingReturns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -135,7 +135,9 @@ export default function PendingReturns() {
     return (
       <s-stack direction="inline" gap="none" align-items="center">
         {images.slice(0, 3).map((img, idx) => (
-          <a key={idx} href={img} target="_blank" rel="noreferrer"><s-thumbnail src={img} alt={`Return image ${idx + 1}`} size="small"/></a>
+          <a key={idx} href={img} target="_blank" rel="noreferrer">
+            <s-thumbnail src={img} alt={`Return image ${idx + 1}`} size="small"/>
+          </a>
         ))}
         {images.length > 3 && (
           <s-badge tone="neutral">+{images.length - 3}</s-badge>
@@ -154,7 +156,7 @@ export default function PendingReturns() {
 
   return (
     <s-page heading="Product Return Management">
-      <div style={{width: 1200, marginLeft: '-120px'}}>
+      <div style={{ width: 1200, marginLeft: '-120px' }}>
         <s-section>
           <s-stack direction="block" gap="base">
             <s-stack direction="inline" gap="loose" align-items="center" justify-content="space-between">
@@ -168,7 +170,8 @@ export default function PendingReturns() {
                 <s-text tone="subdued">Manage and process product return requests</s-text>
               </div>
               <div>
-                <s-button onClick={() => fetchPendingReturns(pageInfo.currentPage)} size="slim" loading={loading} variant="primary">
+                <s-button onClick={() => fetchPendingReturns(pageInfo.currentPage)} size="slim" loading={loading}
+                          variant="primary">
                   Refresh
                 </s-button>
               </div>
@@ -198,7 +201,9 @@ export default function PendingReturns() {
                   <s-table-header>Product</s-table-header>
                   <s-table-header>Reason for Return</s-table-header>
                   <s-table-header>Type of Return</s-table-header>
-                  <s-table-header>Amount</s-table-header>
+                  <s-table-header>Original Amount</s-table-header>
+                  <s-table-header>Return Fee</s-table-header>
+                  <s-table-header>Refund Amount</s-table-header>
                   <s-table-header>Media</s-table-header>
                   <s-table-header>Status</s-table-header>
                   <s-table-header>Actions</s-table-header>
@@ -208,10 +213,12 @@ export default function PendingReturns() {
                     <s-table-row key={ret.id}>
                       <s-table-cell>{ret.id}</s-table-cell>
                       <s-table-cell>
-                        <s-link href={storeUrl + '/customers/' + ret.customerId.replace(/[^\d]+/g, '')}>{ret.customerName}</s-link>
+                        <s-link
+                          href={storeUrl + '/customers/' + ret.customerId.replace(/[^\d]+/g, '')}>{ret.customerName}</s-link>
                       </s-table-cell>
                       <s-table-cell>
-                        <s-link href={storeUrl + '/products/' + ret.productId.replace(/[^\d]+/g, '')}>{ret.productTitle}</s-link>
+                        <s-link
+                          href={storeUrl + '/products/' + ret.productId.replace(/[^\d]+/g, '')}>{ret.productTitle}</s-link>
                       </s-table-cell>
                       <s-table-cell>
                         <s-stack direction="block" gap="none">
@@ -224,14 +231,13 @@ export default function PendingReturns() {
                         </s-stack>
                       </s-table-cell>
                       <s-table-cell>
-                        <s-stack direction="block" gap="none">
-                          <s-text tone="neutral">Original:</s-text>
-                          <s-text>${ret.amount?.toFixed(2)}</s-text>
-                          <s-text tone="neutral">Fee:</s-text>
-                          <s-text>${ret.fee?.toFixed(2)}</s-text>
-                          <s-text tone="neutral">Return:</s-text>
-                          <s-text tone="success" type="strong">${ret.returnAmount?.toFixed(2)}</s-text>
-                        </s-stack>
+                        <s-text tone="neutral">${ret.amount?.toFixed(2)}</s-text>
+                      </s-table-cell>
+                      <s-table-cell>
+                        <s-text tone="neutral">${ret.fee?.toFixed(2)}</s-text>
+                      </s-table-cell>
+                      <s-table-cell>
+                        <s-text tone="neutral">${ret.returnAmount?.toFixed(2)}</s-text>
                       </s-table-cell>
                       <s-table-cell>
                         {renderImageThumbnails(ret.images)}
@@ -250,7 +256,7 @@ export default function PendingReturns() {
                           >
                             Approve
                           </s-button>
-                          <span style={{display: 'inline-block', width: 5}}></span>
+                          <span style={{ display: 'inline-block', width: 5 }}></span>
                           <s-button
                             variant="secondary"
                             tone="critical"
@@ -260,7 +266,7 @@ export default function PendingReturns() {
                           >
                             Reject
                           </s-button>
-                          <span style={{display: 'inline-block', width: 5}}></span>
+                          <span style={{ display: 'inline-block', width: 5 }}></span>
                           <s-button
                             variant="primary"
                             tone="critical"
