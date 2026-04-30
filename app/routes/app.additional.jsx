@@ -189,12 +189,11 @@ export default function AdditionalPage() {
                 <s-table-header-row>
                   <s-table-header list-slot="primary">#</s-table-header>
                   <s-table-header>Customer</s-table-header>
-                  <s-table-header>Order</s-table-header>
                   <s-table-header>Product</s-table-header>
-                  <s-table-header>Media</s-table-header>
                   <s-table-header>Details</s-table-header>
-                  <s-table-header>Status</s-table-header>
                   <s-table-header>Amount</s-table-header>
+                  <s-table-header>Media</s-table-header>
+                  <s-table-header>Status</s-table-header>
                   <s-table-header>Actions</s-table-header>
                 </s-table-header-row>
                 <s-table-body>
@@ -205,13 +204,7 @@ export default function AdditionalPage() {
                         <s-link href={storeUrl + '/customers/' + ret.customerId.replace(/[^\d]+/g, '')}>Customer</s-link>
                       </s-table-cell>
                       <s-table-cell>
-                        <s-link href={storeUrl + '/orders/' + ret.orderId.replace(/[^\d]+/g, '')}>Order #{ret.orderId?.split('/').pop()}</s-link>
-                      </s-table-cell>
-                      <s-table-cell>
                         <s-link href={storeUrl + '/products/' + ret.productId.replace(/[^\d]+/g, '')}>Product</s-link>
-                      </s-table-cell>
-                      <s-table-cell>
-                        {renderImageThumbnails(ret.images)}
                       </s-table-cell>
                       <s-table-cell>
                         <s-stack direction="block" gap="none">
@@ -224,9 +217,6 @@ export default function AdditionalPage() {
                         </s-stack>
                       </s-table-cell>
                       <s-table-cell>
-                        {renderStatusBadge(ret.isApproved)}
-                      </s-table-cell>
-                      <s-table-cell>
                         <s-stack direction="block" gap="none">
                           <s-text tone="neutral">Original:</s-text>
                           <s-text>${ret.amount?.toFixed(2)}</s-text>
@@ -235,6 +225,12 @@ export default function AdditionalPage() {
                           <s-text tone="neutral">Return:</s-text>
                           <s-text tone="success" type="strong">${ret.returnAmount?.toFixed(2)}</s-text>
                         </s-stack>
+                      </s-table-cell>
+                      <s-table-cell>
+                        {renderImageThumbnails(ret.images)}
+                      </s-table-cell>
+                      <s-table-cell>
+                        {renderStatusBadge(ret.isApproved)}
                       </s-table-cell>
                       <s-table-cell>
                         <div>

@@ -22,29 +22,25 @@ const TableRow = props => {
         <s-link href={props.storeUrl + '/customers/' + props.ret.customerId.replace(/[^\d]+/g, '')}>Customer</s-link>
       </s-table-cell>
       <s-table-cell>
-        <s-link href={props.storeUrl + '/orders/' + props.ret.orderId.replace(/[^\d]+/g, '')}>Order
-          #{props.ret.orderId?.split('/').pop()}</s-link>
-      </s-table-cell>
-      <s-table-cell>
         <s-link href={props.storeUrl + '/products/' + props.ret.productId.replace(/[^\d]+/g, '')}>Product</s-link>
-      </s-table-cell>
-      <s-table-cell>
-        {props.renderImageThumbnails}
       </s-table-cell>
       <s-table-cell>
         <s-stack direction="block" gap="none">
           <s-text tone="neutral">Type:</s-text>
           <s-text>{props.ret.returnTypeCaption}</s-text>
-          <s-text tone="neutral">Size:</s-text>
-          <s-text>{props.ret.size}</s-text>
-          <s-text tone="neutral">Color:</s-text>
-          <s-chip>{props.ret.color}</s-chip>
+          {props.ret.size && (
+            <>
+              <s-text tone="neutral">Size:</s-text>
+              <s-text>{props.ret.size}</s-text>
+            </>
+          )}
+          {props.ret.color && (
+            <>
+              <s-text tone="neutral">Color:</s-text>
+              <s-chip>{props.ret.color}</s-chip>
+            </>
+          )}
         </s-stack>
-      </s-table-cell>
-      <s-table-cell>
-        {props.ret.rejectedAt && (<s-badge tone="critical">Rejected</s-badge>)}
-        {props.ret.approvedAt && (<s-badge tone="success">Approved</s-badge>)}
-        {(!props.ret.approvedAt && !props.ret.rejectedAt) && (<s-badge tone="neutral">Pending</s-badge>)}
       </s-table-cell>
       <s-table-cell>
         <s-stack direction="block" gap="none">
@@ -55,6 +51,23 @@ const TableRow = props => {
           <s-text tone="neutral">Return:</s-text>
           <s-text tone="success" type="strong">${props.ret.returnAmount?.toFixed(2)}</s-text>
         </s-stack>
+      </s-table-cell>
+      <s-table-cell>
+        {props.renderImageThumbnails}
+      </s-table-cell>
+      <s-table-cell>
+        {props.ret.rejectedAt && (<s-badge tone="critical">Rejected</s-badge>)}
+        {props.ret.approvedAt && (<s-badge tone="success">Approved</s-badge>)}
+        {(!props.ret.approvedAt && !props.ret.rejectedAt) && (<s-badge tone="neutral">Pending</s-badge>)}
+      </s-table-cell>
+      <s-table-cell>
+        <s-button
+          variant="primary"
+          tone="critical"
+          onClick={() => props.handleDelete()}
+        >
+          Delete
+        </s-button>
       </s-table-cell>
     </s-table-row>
   );
@@ -98,6 +111,27 @@ export default function Index () {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (productId, id) => {
+    const pid = productId.split('/').at(-1);
+    try {
+      await httpClient.delete(`/product-returns/product-id/${pid}`);
+
+      // Remove from list and show success
+      setPendingReturns(prev => prev.filter(r => r.id !== id));
+
+      if (shopify) {
+        shopify.toast.show('Return deleted successfully', 'success');
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete return';
+      setError(errorMessage);
+      if (shopify) {
+        shopify.toast.show('Failed to delete return', 'critical');
+      }
+    } finally {
     }
   };
 
@@ -181,16 +215,17 @@ export default function Index () {
               <s-table-header-row>
                 <s-table-header list-slot="primary">#</s-table-header>
                 <s-table-header>Customer</s-table-header>
-                <s-table-header>Order</s-table-header>
                 <s-table-header>Product</s-table-header>
-                <s-table-header>Media</s-table-header>
                 <s-table-header>Details</s-table-header>
-                <s-table-header>Status</s-table-header>
                 <s-table-header>Amount</s-table-header>
+                <s-table-header>Media</s-table-header>
+                <s-table-header>Status</s-table-header>
+                <s-table-header>&nbsp;</s-table-header>
               </s-table-header-row>
               <s-table-body>
                 {pendingReturns.map((ret) => (
                   <TableRow
+                    handleDelete={() => handleDelete(ret.productId, ret.id)}
                     key={ret.id}
                     ret={ret} storeUrl={storeUrl}
                     renderImageThumbnails={renderImageThumbnails(ret.images)}/>
