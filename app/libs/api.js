@@ -75,6 +75,21 @@ class HttpClient {
       throw new Error(`PATCH request failed: ${error.message}`);
     }
   }
+
+  /**
+   * Sends a DELETE request to the specified URL.
+   * @param {string} url - The endpoint URL.
+   * @param {Object} [config] - Optional axios configuration (e.g., headers).
+   * @returns {Promise} A promise that resolves with the response data.
+   */
+  async delete(url, config = {}) {
+    try {
+      const response = await this.client.delete(url, config);
+      return response.data;
+    } catch (error) {
+      throw new Error(`DELETE request failed: ${error.message}`);
+    }
+  }
 }
 
 const client = new HttpClient({
