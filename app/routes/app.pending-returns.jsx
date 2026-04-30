@@ -146,6 +146,12 @@ export default function PendingReturns() {
 
   const storeUrl = `https://admin.shopify.com/store/${import.meta.env.VITE_STORE_NAME}`;
 
+  const creditTypes = {
+    STORE_CREDIT: 'Store Credit',
+    PARTIAL_REFUND: 'Partial Refund',
+    SIZE_COLOR_EXCHANGE: 'Size/Color Exchange',
+  };
+
   return (
     <s-page heading="Product Return Management">
       <div style={{width: 1200, marginLeft: '-120px'}}>
@@ -190,7 +196,8 @@ export default function PendingReturns() {
                   <s-table-header list-slot="primary">#</s-table-header>
                   <s-table-header>Customer</s-table-header>
                   <s-table-header>Product</s-table-header>
-                  <s-table-header>Details</s-table-header>
+                  <s-table-header>Reason for Return</s-table-header>
+                  <s-table-header>Type of Return</s-table-header>
                   <s-table-header>Amount</s-table-header>
                   <s-table-header>Media</s-table-header>
                   <s-table-header>Status</s-table-header>
@@ -208,20 +215,12 @@ export default function PendingReturns() {
                       </s-table-cell>
                       <s-table-cell>
                         <s-stack direction="block" gap="none">
-                          <s-text tone="neutral">Type:</s-text>
                           <s-text>{ret.returnTypeCaption}</s-text>
-                          {ret.size && (
-                            <>
-                              <s-text tone="neutral">Size:</s-text>
-                              <s-text>{ret.size}</s-text>
-                            </>
-                          )}
-                          {ret.color && (
-                            <>
-                              <s-text tone="neutral">Color:</s-text>
-                              <s-chip>{ret.color}</s-chip>
-                            </>
-                          )}
+                        </s-stack>
+                      </s-table-cell>
+                      <s-table-cell>
+                        <s-stack direction="block" gap="none">
+                          <s-text>{creditTypes[ret.creditType]}</s-text>
                         </s-stack>
                       </s-table-cell>
                       <s-table-cell>

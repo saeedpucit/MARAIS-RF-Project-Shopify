@@ -14,6 +14,12 @@ export const action = async ({ request }) => {
   return null;
 };
 
+const creditTypes = {
+  STORE_CREDIT: 'Store Credit',
+  PARTIAL_REFUND: 'Partial Refund',
+  SIZE_COLOR_EXCHANGE: 'Size/Color Exchange',
+};
+
 const TableRow = props => {
   return (
     <s-table-row>
@@ -26,8 +32,16 @@ const TableRow = props => {
       </s-table-cell>
       <s-table-cell>
         <s-stack direction="block" gap="none">
-          <s-text tone="neutral">Type:</s-text>
           <s-text>{props.ret.returnTypeCaption}</s-text>
+        </s-stack>
+      </s-table-cell>
+      <s-table-cell>
+        <s-stack direction="block" gap="none">
+          <s-text>{creditTypes[props.ret.creditType]}</s-text>
+        </s-stack>
+      </s-table-cell>
+      {/*<s-table-cell>
+        <s-stack direction="block" gap="none">
           {props.ret.size && (
             <>
               <s-text tone="neutral">Size:</s-text>
@@ -41,7 +55,7 @@ const TableRow = props => {
             </>
           )}
         </s-stack>
-      </s-table-cell>
+      </s-table-cell>*/}
       <s-table-cell>
         <s-stack direction="block" gap="none">
           <s-text tone="neutral">Original:</s-text>
@@ -216,7 +230,8 @@ export default function Index () {
                 <s-table-header list-slot="primary">#</s-table-header>
                 <s-table-header>Customer</s-table-header>
                 <s-table-header>Product</s-table-header>
-                <s-table-header>Details</s-table-header>
+                <s-table-header>Reason for Return</s-table-header>
+                <s-table-header>Type of Return</s-table-header>
                 <s-table-header>Amount</s-table-header>
                 <s-table-header>Media</s-table-header>
                 <s-table-header>Status</s-table-header>
