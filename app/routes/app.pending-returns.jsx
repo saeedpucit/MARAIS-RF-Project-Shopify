@@ -2,7 +2,7 @@ import { useAppBridge } from '@shopify/app-bridge-react';
 import { useEffect, useState } from 'react';
 import httpClient from '../libs/api.js';
 
-export default function AdditionalPage() {
+export default function PendingReturns() {
   const shopify = useAppBridge();
   const [pendingReturns, setPendingReturns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -201,10 +201,10 @@ export default function AdditionalPage() {
                     <s-table-row key={ret.id}>
                       <s-table-cell>{ret.id}</s-table-cell>
                       <s-table-cell>
-                        <s-link href={storeUrl + '/customers/' + ret.customerId.replace(/[^\d]+/g, '')}>Customer</s-link>
+                        <s-link href={storeUrl + '/customers/' + ret.customerId.replace(/[^\d]+/g, '')}>{ret.customerName}</s-link>
                       </s-table-cell>
                       <s-table-cell>
-                        <s-link href={storeUrl + '/products/' + ret.productId.replace(/[^\d]+/g, '')}>Product</s-link>
+                        <s-link href={storeUrl + '/products/' + ret.productId.replace(/[^\d]+/g, '')}>{ret.productTitle}</s-link>
                       </s-table-cell>
                       <s-table-cell>
                         <s-stack direction="block" gap="none">

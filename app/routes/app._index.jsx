@@ -19,10 +19,10 @@ const TableRow = props => {
     <s-table-row>
       <s-table-cell>{props.ret.id}</s-table-cell>
       <s-table-cell>
-        <s-link href={props.storeUrl + '/customers/' + props.ret.customerId.replace(/[^\d]+/g, '')}>Customer</s-link>
+        <s-link href={props.storeUrl + '/customers/' + props.ret.customerId.replace(/[^\d]+/g, '')}>{props.ret.customerName}</s-link>
       </s-table-cell>
       <s-table-cell>
-        <s-link href={props.storeUrl + '/products/' + props.ret.productId.replace(/[^\d]+/g, '')}>Product</s-link>
+        <s-link href={props.storeUrl + '/products/' + props.ret.productId.replace(/[^\d]+/g, '')}>{props.ret.productTitle}</s-link>
       </s-table-cell>
       <s-table-cell>
         <s-stack direction="block" gap="none">
