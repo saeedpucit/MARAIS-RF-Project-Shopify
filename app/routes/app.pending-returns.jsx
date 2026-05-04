@@ -1,6 +1,8 @@
 import { useAppBridge } from '@shopify/app-bridge-react';
 import { useEffect, useState } from 'react';
-import httpClient from '../libs/api.js';
+import httpClient from '../libs/api';
+import ImagesViewer from '../components/ImagesViewer';
+import { confirmAlert } from 'react-confirm-alert';
 
 export default function PendingReturns () {
   const shopify = useAppBridge();
@@ -240,7 +242,7 @@ export default function PendingReturns () {
                         <s-text tone="neutral">${ret.returnAmount?.toFixed(2)}</s-text>
                       </s-table-cell>
                       <s-table-cell>
-                        {renderImageThumbnails(ret.images)}
+                        <ImagesViewer images={ret.images}/>
                       </s-table-cell>
                       <s-table-cell>
                         {renderStatusBadge(ret.isApproved)}
@@ -250,7 +252,20 @@ export default function PendingReturns () {
                           <s-button
                             variant="primary"
                             tone="auto"
-                            onClick={() => handleApprove(ret.id)}
+                            onClick={() => confirmAlert({
+                              title: 'Confirm approve',
+                              message: 'Are you sure to approve this request?',
+                              buttons: [
+                                {
+                                  label: 'Yes',
+                                  onClick: () => handleApprove(ret.id)
+                                },
+                                {
+                                  label: 'No',
+                                  onClick: () => {}
+                                }
+                              ]
+                            })}
                             disabled={processingId !== null}
                             loading={processingId === ret.id}
                           >
@@ -260,7 +275,20 @@ export default function PendingReturns () {
                           <s-button
                             variant="secondary"
                             tone="critical"
-                            onClick={() => handleReject(ret.id)}
+                            onClick={() => confirmAlert({
+                              title: 'Confirm reject',
+                              message: 'Are you sure to reject this request?',
+                              buttons: [
+                                {
+                                  label: 'Yes',
+                                  onClick: () => handleReject(ret.id)
+                                },
+                                {
+                                  label: 'No',
+                                  onClick: () => {}
+                                }
+                              ]
+                            })}
                             disabled={processingId !== null}
                             loading={processingId === ret.id}
                           >
@@ -270,7 +298,20 @@ export default function PendingReturns () {
                           <s-button
                             variant="primary"
                             tone="critical"
-                            onClick={() => handleDelete(ret.productId, ret.id)}
+                            onClick={() => confirmAlert({
+                              title: 'Confirm delete',
+                              message: 'Are you sure to delete this request?',
+                              buttons: [
+                                {
+                                  label: 'Yes',
+                                  onClick: () => handleDelete(ret.productId, ret.id)
+                                },
+                                {
+                                  label: 'No',
+                                  onClick: () => {}
+                                }
+                              ]
+                            })}
                             disabled={processingId !== null}
                             loading={processingId === ret.id}
                           >

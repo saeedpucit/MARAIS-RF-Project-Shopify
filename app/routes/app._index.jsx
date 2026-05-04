@@ -3,6 +3,8 @@ import { useAppBridge } from '@shopify/app-bridge-react';
 import { authenticate } from '../shopify.server';
 import httpClient from '../libs/api';
 import * as PropTypes from 'prop-types';
+import ImagesViewer from '../components/ImagesViewer';
+import { confirmAlert } from 'react-confirm-alert';
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
@@ -52,7 +54,7 @@ const TableRow = props => {
         <s-text tone="neutral">${props.ret.returnAmount?.toFixed(2)}</s-text>
       </s-table-cell>
       <s-table-cell>
-        {props.renderImageThumbnails}
+        <ImagesViewer images={props.ret.images}/>
       </s-table-cell>
       <s-table-cell>
         {props.ret.rejectedAt && (<s-badge tone="critical">Rejected</s-badge>)}
@@ -228,10 +230,22 @@ export default function Index () {
                 <s-table-body>
                   {pendingReturns.map((ret) => (
                     <TableRow
-                      handleDelete={() => handleDelete(ret.productId, ret.id)}
+                      handleDelete={() => confirmAlert({
+                        title: 'Confirm delete',
+                        message: 'Are you sure to delete this request?',
+                        buttons: [
+                          {
+                            label: 'Yes',
+                            onClick: () => handleDelete(ret.productId, ret.id)
+                          },
+                          {
+                            label: 'No',
+                            onClick: () => {}
+                          }
+                        ]
+                      })}
                       key={ret.id}
-                      ret={ret} storeUrl={storeUrl}
-                      renderImageThumbnails={renderImageThumbnails(ret.images)}/>
+                      ret={ret} storeUrl={storeUrl}/>
                   ))}
                 </s-table-body>
               </s-table>
