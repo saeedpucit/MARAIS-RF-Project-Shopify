@@ -213,7 +213,10 @@ export default function PendingReturns () {
                 <s-table-body>
                   {pendingReturns.map((ret) => (
                     <s-table-row key={ret.id}>
-                      <s-table-cell>{ret.id}</s-table-cell>
+                      <s-table-cell>
+                        <s-link
+                          href={storeUrl + '/orders/' + ret.orderId.replace(/[^\d]+/g, '')}>{ret.orderNumber}</s-link>
+                        </s-table-cell>
                       <s-table-cell>
                         <s-link
                           href={storeUrl + '/customers/' + ret.customerId.replace(/[^\d]+/g, '')}>{ret.customerName}</s-link>

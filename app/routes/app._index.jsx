@@ -25,7 +25,10 @@ const creditTypes = {
 const TableRow = props => {
   return (
     <s-table-row>
-      <s-table-cell>{props.ret.id}</s-table-cell>
+      <s-table-cell>
+        <s-link
+          href={props.storeUrl + '/orders/' + props.ret.orderId.replace(/[^\d]+/g, '')}>{props.ret.orderNumber}</s-link>
+      </s-table-cell>
       <s-table-cell>
         <s-link
           href={props.storeUrl + '/customers/' + props.ret.customerId.replace(/[^\d]+/g, '')}>{props.ret.customerName}</s-link>
