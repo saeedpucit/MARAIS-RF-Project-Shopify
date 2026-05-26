@@ -158,7 +158,7 @@ export default function PendingReturns () {
 
   return (
     <s-page heading="Product Return Management">
-      <div style={{ width: 1200, marginLeft: '-120px' }}>
+      <div>
         <s-section>
           <s-stack direction="block" gap="base">
             <s-stack direction="inline" gap="loose" align-items="center" justify-content="space-between">
