@@ -71,13 +71,15 @@ const TableRow = props => {
         {(!props.ret.approvedAt && !props.ret.rejectedAt) && (<s-badge tone="neutral">Pending</s-badge>)}
       </s-table-cell>
       <s-table-cell>
-        <s-button
-          variant="primary"
-          tone="critical"
-          onClick={() => props.handleDelete()}
-        >
-          Delete
-        </s-button>
+        <div style={{marginTop: 5}}>
+          <s-button
+            variant="primary"
+            tone="critical"
+            onClick={() => props.handleDelete()}
+          >
+            Delete
+          </s-button>
+        </div>
       </s-table-cell>
     </s-table-row>
   );

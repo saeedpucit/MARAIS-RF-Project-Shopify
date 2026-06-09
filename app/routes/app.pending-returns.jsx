@@ -257,7 +257,7 @@ export default function PendingReturns () {
                         {renderStatusBadge(ret.isApproved)}
                       </s-table-cell>
                       <s-table-cell>
-                        <div>
+                        <div style={{marginTop: 5}}>
                           <s-button
                             variant="primary"
                             tone="auto"
@@ -280,7 +280,7 @@ export default function PendingReturns () {
                           >
                             Approve
                           </s-button>
-                          <span style={{ display: 'inline-block', width: 5 }}></span>
+                          <span style={{ display: 'inline-block', width: 5, height: 3 }}></span>
                           <s-button
                             variant="secondary"
                             tone="critical"
@@ -303,7 +303,7 @@ export default function PendingReturns () {
                           >
                             Reject
                           </s-button>
-                          <span style={{ display: 'inline-block', width: 5 }}></span>
+                          <span style={{ display: 'inline-block', width: 5, height: 3 }}></span>
                           <s-button
                             variant="primary"
                             tone="critical"
