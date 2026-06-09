@@ -30,16 +30,22 @@ const TableRow = props => {
           href={props.storeUrl + '/orders/' + props.ret.orderId.replace(/[^\d]+/g, '')}>{props.ret.orderNumber}</s-link>
       </s-table-cell>
       <s-table-cell>
-        <s-link
-          href={props.storeUrl + '/customers/' + props.ret.customerId.replace(/[^\d]+/g, '')}>{props.ret.customerName}</s-link>
+        <div style={{ textAlign: 'right' }}>
+          <s-link
+            href={props.storeUrl + '/customers/' + props.ret.customerId.replace(/[^\d]+/g, '')}>{props.ret.customerName}</s-link>
+        </div>
       </s-table-cell>
       <s-table-cell>
-        <s-link
-          href={props.storeUrl + '/products/' + props.ret.productId.replace(/[^\d]+/g, '')}>{props.ret.productTitle}</s-link>
+        <div style={{ textAlign: 'right' }}>
+          <s-link
+            href={props.storeUrl + '/products/' + props.ret.productId.replace(/[^\d]+/g, '')}>{props.ret.productTitle}</s-link>
+        </div>
       </s-table-cell>
       <s-table-cell>
         <s-stack direction="block" gap="none">
-          <s-text>{props.ret.returnTypeCaption}</s-text>
+          <div style={{ textAlign: 'right' }}>
+            <s-text>{props.ret.returnTypeCaption}</s-text>
+          </div>
         </s-stack>
       </s-table-cell>
       <s-table-cell>

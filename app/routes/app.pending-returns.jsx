@@ -216,18 +216,24 @@ export default function PendingReturns () {
                       <s-table-cell>
                         <s-link
                           href={storeUrl + '/orders/' + ret.orderId.replace(/[^\d]+/g, '')}>{ret.orderNumber}</s-link>
-                        </s-table-cell>
-                      <s-table-cell>
-                        <s-link
-                          href={storeUrl + '/customers/' + ret.customerId.replace(/[^\d]+/g, '')}>{ret.customerName}</s-link>
                       </s-table-cell>
                       <s-table-cell>
-                        <s-link
-                          href={storeUrl + '/products/' + ret.productId.replace(/[^\d]+/g, '')}>{ret.productTitle}</s-link>
+                        <div style={{ textAlign: 'right' }}>
+                          <s-link
+                            href={storeUrl + '/customers/' + ret.customerId.replace(/[^\d]+/g, '')}>{ret.customerName}</s-link>
+                        </div>
+                      </s-table-cell>
+                      <s-table-cell>
+                        <div style={{ textAlign: 'right' }}>
+                          <s-link
+                            href={storeUrl + '/products/' + ret.productId.replace(/[^\d]+/g, '')}>{ret.productTitle}</s-link>
+                        </div>
                       </s-table-cell>
                       <s-table-cell>
                         <s-stack direction="block" gap="none">
-                          <s-text>{ret.returnTypeCaption}</s-text>
+                          <div style={{ textAlign: 'right' }}>
+                            <s-text>{ret.returnTypeCaption}</s-text>
+                          </div>
                         </s-stack>
                       </s-table-cell>
                       <s-table-cell>
