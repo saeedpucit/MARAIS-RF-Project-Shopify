@@ -129,25 +129,6 @@ export default function PendingReturns () {
     );
   };
 
-  const renderImageThumbnails = (images) => {
-    if (!images || images.length === 0) {
-      return <s-text tone="neutral">No images</s-text>;
-    }
-
-    return (
-      <s-stack direction="inline" gap="none" align-items="center">
-        {images.slice(0, 3).map((img, idx) => (
-          <a key={idx} href={img} target="_blank" rel="noreferrer">
-            <s-thumbnail src={img} alt={`Return image ${idx + 1}`} size="small"/>
-          </a>
-        ))}
-        {images.length > 3 && (
-          <s-badge tone="neutral">+{images.length - 3}</s-badge>
-        )}
-      </s-stack>
-    );
-  };
-
   const storeUrl = `https://admin.shopify.com/store/${import.meta.env.VITE_STORE_NAME}`;
 
   const creditTypes = {
@@ -172,8 +153,10 @@ export default function PendingReturns () {
                 <s-text tone="subdued">Manage and process product return requests</s-text>
               </div>
               <div>
-                <s-button onClick={() => fetchPendingReturns(pageInfo.currentPage)} size="slim" loading={loading}
-                          variant="primary">
+                <s-button
+                  onClick={() => fetchPendingReturns(pageInfo.currentPage)}
+                  size="slim" loading={loading}
+                  variant="primary">
                   Refresh
                 </s-button>
               </div>
@@ -218,27 +201,25 @@ export default function PendingReturns () {
                           href={storeUrl + '/orders/' + ret.orderId.replace(/[^\d]+/g, '')}>{ret.orderNumber}</s-link>
                       </s-table-cell>
                       <s-table-cell>
-                        <div style={{ textAlign: 'right' }}>
+                        <div className="max-sm:text-right">
                           <s-link
                             href={storeUrl + '/customers/' + ret.customerId.replace(/[^\d]+/g, '')}>{ret.customerName}</s-link>
                         </div>
                       </s-table-cell>
                       <s-table-cell>
-                        <div style={{ textAlign: 'right' }}>
+                        <div className="max-sm:text-right">
                           <s-link
                             href={storeUrl + '/products/' + ret.productId.replace(/[^\d]+/g, '')}>{ret.productTitle}</s-link>
                         </div>
                       </s-table-cell>
                       <s-table-cell>
-                        <s-stack direction="block" gap="none">
-                          <div style={{ textAlign: 'right' }}>
-                            <s-text>{ret.returnTypeCaption}</s-text>
-                          </div>
-                        </s-stack>
+                        <div className="max-sm:text-right">
+                          <s-text>{ret.returnTypeCaption}</s-text>
+                        </div>
                       </s-table-cell>
                       <s-table-cell>
                         <s-stack direction="block" gap="none">
-                          <s-text>{creditTypes[ret.creditType]}</s-text>
+                          <s-text>{creditTypes?.[ret.creditType] ?? '-'}</s-text>
                         </s-stack>
                       </s-table-cell>
                       <s-table-cell>
@@ -257,7 +238,7 @@ export default function PendingReturns () {
                         {renderStatusBadge(ret.isApproved)}
                       </s-table-cell>
                       <s-table-cell>
-                        <div style={{marginTop: 5}}>
+                        <div className="grid gap-y-1 max-sm:mt-2">
                           <s-button
                             variant="primary"
                             tone="auto"
@@ -280,7 +261,6 @@ export default function PendingReturns () {
                           >
                             Approve
                           </s-button>
-                          <span style={{ display: 'inline-block', width: 5, height: 3 }}></span>
                           <s-button
                             variant="secondary"
                             tone="critical"
@@ -303,7 +283,6 @@ export default function PendingReturns () {
                           >
                             Reject
                           </s-button>
-                          <span style={{ display: 'inline-block', width: 5, height: 3 }}></span>
                           <s-button
                             variant="primary"
                             tone="critical"

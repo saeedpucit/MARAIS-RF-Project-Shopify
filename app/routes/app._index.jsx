@@ -26,32 +26,28 @@ const TableRow = props => {
   return (
     <s-table-row>
       <s-table-cell>
+        <div className="max-sm:text-right">
         <s-link
           href={props.storeUrl + '/orders/' + props.ret.orderId.replace(/[^\d]+/g, '')}>{props.ret.orderNumber}</s-link>
+        </div>
       </s-table-cell>
       <s-table-cell>
-        <div style={{ textAlign: 'right' }}>
+        <div className="max-sm:text-right">
           <s-link
             href={props.storeUrl + '/customers/' + props.ret.customerId.replace(/[^\d]+/g, '')}>{props.ret.customerName}</s-link>
         </div>
       </s-table-cell>
       <s-table-cell>
-        <div style={{ textAlign: 'right' }}>
+        <div className="max-sm:text-right">
           <s-link
             href={props.storeUrl + '/products/' + props.ret.productId.replace(/[^\d]+/g, '')}>{props.ret.productTitle}</s-link>
         </div>
       </s-table-cell>
       <s-table-cell>
-        <s-stack direction="block" gap="none">
-          <div style={{ textAlign: 'right' }}>
-            <s-text>{props.ret.returnTypeCaption}</s-text>
-          </div>
-        </s-stack>
+        <div className="max-sm:text-right">{props.ret.returnTypeCaption}</div>
       </s-table-cell>
       <s-table-cell>
-        <s-stack direction="block" gap="none">
-          <s-text>{creditTypes[props.ret.creditType]}</s-text>
-        </s-stack>
+        <div className="max-sm:text-right">{creditTypes?.[props.ret.creditType] ?? '-'}</div>
       </s-table-cell>
       <s-table-cell>
         <s-text tone="neutral">${props.ret.amount?.toFixed(2)}</s-text>
@@ -71,7 +67,7 @@ const TableRow = props => {
         {(!props.ret.approvedAt && !props.ret.rejectedAt) && (<s-badge tone="neutral">Pending</s-badge>)}
       </s-table-cell>
       <s-table-cell>
-        <div style={{marginTop: 5}}>
+        <div className="max-sm:mt-2">
           <s-button
             variant="primary"
             tone="critical"
@@ -150,37 +146,6 @@ export default function Index () {
   useEffect(() => {
     fetchPendingReturns();
   }, []);
-
-  const renderStatusBadge = (ref) => {
-    if (ref?.rejectedAt !== null) {
-      <s-badge tone="critical">Rejected</s-badge>;
-    }
-
-    if (ref?.approvedAt !== null) {
-      <s-badge tone="success">Approved</s-badge>;
-    }
-
-    return <s-badge tone="neutral">Pending</s-badge>;
-  };
-
-  const renderImageThumbnails = (images) => {
-    if (!images || images.length === 0) {
-      return <s-text tone="neutral">No images</s-text>;
-    }
-
-    return (
-      <s-stack direction="inline" gap="none" align-items="center">
-        {images.slice(0, 3).map((img, idx) => (
-          <a key={idx} href={img} target="_blank" rel="noreferrer">
-            <s-thumbnail src={img} alt={`Return image ${idx + 1}`} size="small"/>
-          </a>
-        ))}
-        {images.length > 3 && (
-          <s-badge tone="neutral">+{images.length - 3}</s-badge>
-        )}
-      </s-stack>
-    );
-  };
 
   const storeUrl = `https://admin.shopify.com/store/${import.meta.env.VITE_STORE_NAME}`;
 
